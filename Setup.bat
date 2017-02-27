@@ -79,8 +79,8 @@ call :print_success "GnuWin installed"
 echo detect if VIM installed
 vim --version >nul 2>&1
 if %errorlevel% neq 0 (
-	echo VIM not installed, install it by 'choco /y vim'
-	choco install /y vim
+	echo VIM not installed, install it by 'choco install /y vim-tux.portable'
+	choco install /y vim-tux.portable
 	if %errorlevel% neq 0 (
 		call :print_failure "Install VIM failed"
 		pause >nul
