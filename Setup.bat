@@ -35,6 +35,26 @@ if not exist "%LOCALAPPDATA%\GitHub\" (
 	pause >nul
 	exit /b
 )
+
+:: ========install GnuWin========
+awk --version >nul 2>&1
+if %errorlevel% neq 0 (
+	echo Install GnuWin by 'choco /y gnuwin'
+	choco install /y gnuwin
+	if %errorlevel% neq 0 (
+		call :print_failure "Install GnuWin failed"
+		pause >nul
+		exit /b
+	) else (
+		echo adding GnuWin to system path
+		setx PATH "%PATH%;C:\GnuWin\bin" -m
+		echo adding GnuWin to PATH for this session
+		set "PATH=%PATH%;C:\GnuWin\bin"
+	)
+)
+call :print_success "GnuWin installed"
+
+:: currently detecting git install path used GnuWin tools, so install GnuWin before git install path detection
 echo detect if git is in system path
 git --version >nul 2>&1
 if %errorlevel% neq 0 (
@@ -56,24 +76,6 @@ if %errorlevel% neq 0 (
 	echo git is already in system path
 )
 call :print_success "Git check pass"
-
-:: ========install GnuWin========
-awk --version >nul 2>&1
-if %errorlevel% neq 0 (
-	echo Install GnuWin by 'choco /y gnuwin'
-	choco install /y gnuwin
-	if %errorlevel% neq 0 (
-		call :print_failure "Install GnuWin failed"
-		pause >nul
-		exit /b
-	) else (
-		echo adding GnuWin to system path
-		setx PATH "%PATH%;C:\GnuWin\bin" -m
-		echo adding GnuWin to PATH for this session
-		set "PATH=%PATH%;C:\GnuWin\bin"
-	)
-)
-call :print_success "GnuWin installed"
 
 :: ========install VIM========
 echo detect if VIM installed
