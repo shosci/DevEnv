@@ -13,16 +13,18 @@ call :print_success "Permission check pass"
 :: ========check prerequisites========
 ::
 :: ========1. chocolatey========
-:: TODO - remove this prerequisite and make choco installation part of this script
 echo Chocolatey required.
 echo Checking...
 choco -v >nul 2>&1
 if %errorlevel% neq 0 (
-	call :print_failure "Chocolatey is not installed, install it from https://chocolatey.org"
-	pause >nul
-	exit /b
+	::call :print_failure "Chocolatey is not installed, install it from https://chocolatey.org"
+	::pause >nul
+	::exit /b
+	echo Chocolatey is not intalled, installing...
+	powershell "Set-ExecutionPolicy -Scope Process -ExecutionPolicy ByPass; iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex; exit;"
+) else (
+	call :print_success "Choco check pass"
 )
-call :print_success "Choco check pass"
 
 :: ========2. GitHub========
 :: TODO - remove this prerequisite and make git installation part of this script
