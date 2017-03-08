@@ -42,9 +42,10 @@ if not exist "%LOCALAPPDATA%\GitHub\" (
 awk --version >nul 2>&1
 if %errorlevel% neq 0 (
 	echo Install GnuWin by 'choco /y gnuwin'
-	choco install /y gnuwin
-	if %errorlevel% neq 0 (
-		call :print_failure "Install GnuWin failed"
+	choco install -y gnuwin
+	set errcode=%errorlevel%
+	if %errcode% neq 0 (
+		call :print_failure "Install GnuWin failed, error code: %errcode%"
 		pause >nul
 		exit /b
 	) else (
@@ -84,9 +85,10 @@ echo detect if VIM installed
 vim --version >nul 2>&1
 if %errorlevel% neq 0 (
 	echo VIM not installed, install it by 'choco install /y vim-tux.portable'
-	choco install /y vim-tux.portable
-	if %errorlevel% neq 0 (
-		call :print_failure "Install VIM failed"
+	choco install -y vim-tux.portable
+	set errcode=%errorlevel%
+	if %errcode% neq 0 (
+		call :print_failure "Install VIM failed, error code: %errcode%"
 		pause >nul
 		exit /b
 	)
@@ -141,10 +143,10 @@ git clone https://github.com/vim-airline/vim-airline.git
 
 :: ========install ConEmu========
 echo Install ConEmu by 'choco /y conemu'
-choco install /y conemu
-
-if %errorlevel% neq 0 (
-	call :print_failure "Install ConEmu failed"
+choco install -y conemu
+set errcode=%errorlevel%
+if %errcode% neq 0 (
+	call :print_failure "Install ConEmu failed, error code: %errcode%"
 	pause >nul
 	exit /b
 )
