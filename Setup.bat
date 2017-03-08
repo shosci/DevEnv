@@ -22,6 +22,9 @@ if %errorlevel% neq 0 (
 	::exit /b
 	echo Chocolatey is not intalled, installing...
 	powershell "Set-ExecutionPolicy -Scope Process -ExecutionPolicy ByPass; iwr https://chocolatey.org/install.ps1 -UseBasicParsing | iex; exit;"
+	echo please restart the cmd prompt
+	pause >nul
+	exit /b
 ) else (
 	call :print_success "Choco check pass"
 )
@@ -36,11 +39,13 @@ if not exist "%LOCALAPPDATA%\GitHub\" (
 	call :print_failure "Please intall GitHub Desktop from https://desktop.github.com/"
 	pause >nul
 	exit /b
+) else (
+	call :print_success "GitHub installed"
 )
 
 :: ========install GnuWin========
 awk --version >nul 2>&1
-if %errorlevel% neq 0 (
+if "%errorlevel%" neq "0" (
 	echo Install GnuWin by 'choco /y gnuwin'
 	choco install -y gnuwin
 	set errcode=%errorlevel%
