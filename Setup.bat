@@ -4,7 +4,7 @@ Setlocal EnableDelayedExpansion
 echo Admin permission required.
 echo Checking...
 net session >nul 2>&1
-if %errorlevel% neq 0 (
+if "%errorlevel%" neq "0" (
 	call :print_failure "Inadequate permission, please run as Admin"
 	pause >nul
 	exit /b
@@ -17,7 +17,7 @@ call :print_success "Permission check pass"
 echo Chocolatey required.
 echo Checking...
 choco -v >nul 2>&1
-if %errorlevel% neq 0 (
+if "%errorlevel%" neq "0" (
 	::call :print_failure "Chocolatey is not installed, install it from https://chocolatey.org"
 	::pause >nul
 	::exit /b
@@ -66,16 +66,16 @@ call :print_success "GnuWin installed"
 :: currently detecting git install path used GnuWin tools, so install GnuWin before git install path detection
 echo detect if git is in system path
 git --version >nul 2>&1
-if %errorlevel% neq 0 (
+if "%errorlevel%" neq "0" (
 	call :print_warning "git is not in system path"
 	echo detecting git install path...
 	for /f "tokens=*" %%f in ('dir %LOCALAPPDATA%\GitHub ^| grep PortableGit ^| awk "{print $5;}"') do set GitPath=%%f
 	if defined GitPath (
-		echo git install path detected: %LocalAppData%\GitHub\%GitPath% 
+		echo git install path detected: %LocalAppData%\GitHub\!GitPath! 
 		echo adding git into system path...
-		setx PATH "%PATH%;%LocalAppData%\GitHub\%GitPath%\cmd" -m
+		setx PATH "%PATH%;%LocalAppData%\GitHub\!GitPath!\cmd" -m
 		echo adding git into path for this session
-		set "PATH=%PATH%;%LocalAppData%\GitHub\%GitPath%\cmd"
+		set "PATH=%PATH%;%LocalAppData%\GitHub\!GitPath!\cmd"
 	) else (
 		call :print_failure "Didn't detect git install path, it should be like %LocalAppData%\GitHub\PortableGit_XXX"
 		pause >nul
@@ -89,7 +89,7 @@ call :print_success "Git check pass"
 :: ========install VIM========
 echo detect if VIM installed
 vim --version >nul 2>&1
-if %errorlevel% neq 0 (
+if "%errorlevel%" neq "0" (
 	echo VIM not installed, install it by 'choco install /y vim-tux.portable'
 	choco install -y vim-tux.portable
 	set errcode=!errorlevel!
@@ -175,5 +175,5 @@ rem https://gist.github.com/mlocati/fdabcaeb8071d5c75a2d51712db24011#file-win10c
 
 :print_warning message
 :: message - warning message to print
-	echo [93m Success: %~1. [0m
+	echo [93m Warning: %~1. [0m
 	exit /b
