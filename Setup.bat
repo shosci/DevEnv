@@ -50,8 +50,8 @@ if "%errorlevel%" neq "0" (
 	echo Install GnuWin by 'choco /y gnuwin'
 	choco install -y gnuwin
 	set errcode=!errorlevel!
-	if %errcode% neq 0 (
-		call :print_failure "Install GnuWin failed, error code: %errcode%"
+	if "!errcode!" neq "0" (
+		call :print_failure "Install GnuWin failed, error code: !errcode!"
 		pause >nul
 		exit /b
 	) else (
@@ -93,8 +93,8 @@ if %errorlevel% neq 0 (
 	echo VIM not installed, install it by 'choco install /y vim-tux.portable'
 	choco install -y vim-tux.portable
 	set errcode=!errorlevel!
-	if %errcode% neq 0 (
-		call :print_failure "Install VIM failed, error code: %errcode%"
+	if "!errcode!" neq "0" (
+		call :print_failure "Install VIM failed, error code: !errcode!"
 		pause >nul
 		exit /b
 	)
