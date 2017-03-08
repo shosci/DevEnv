@@ -1,4 +1,5 @@
 @echo off
+Setlocal EnableDelayedExpansion
 :: ========check permissions========
 echo Admin permission required.
 echo Checking...
@@ -48,7 +49,7 @@ awk --version >nul 2>&1
 if "%errorlevel%" neq "0" (
 	echo Install GnuWin by 'choco /y gnuwin'
 	choco install -y gnuwin
-	set errcode=%errorlevel%
+	set errcode=!errorlevel!
 	if %errcode% neq 0 (
 		call :print_failure "Install GnuWin failed, error code: %errcode%"
 		pause >nul
@@ -91,7 +92,7 @@ vim --version >nul 2>&1
 if %errorlevel% neq 0 (
 	echo VIM not installed, install it by 'choco install /y vim-tux.portable'
 	choco install -y vim-tux.portable
-	set errcode=%errorlevel%
+	set errcode=!errorlevel!
 	if %errcode% neq 0 (
 		call :print_failure "Install VIM failed, error code: %errcode%"
 		pause >nul
