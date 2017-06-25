@@ -34,57 +34,35 @@ if "%errorlevel%" neq "0" (
 :: TODO - remove this prerequisite and make git installation part of this script
 echo Git required.
 echo Checking...
-if not exist "%LOCALAPPDATA%\GitHub\" (
-	:: Choco doesn't have a stable packacke for git yet, manual installation from github is recommended.
-	:: choco install /y git/git.install/github none of them seemed good enough
-	call :print_failure "Please intall GitHub Desktop from https://desktop.github.com/"
+git --version >nul 2>&1
+if "%errorlevel%" neq "0" (
+	echo Git is not intalled, installing...
+	choco install -y git
+	echo please restart the cmd prompt, and rerun this bat
 	pause >nul
 	exit /b
 ) else (
-	call :print_success "GitHub installed"
+	call :print_success "git check pass"
 )
 
-:: ========install GnuWin========
-awk --version >nul 2>&1
-if "%errorlevel%" neq "0" (
-	echo Install GnuWin by 'choco /y gnuwin'
-	choco install -y gnuwin
-	set errcode=!errorlevel!
-	if "!errcode!" neq "0" (
-		call :print_failure "Install GnuWin failed, error code: !errcode!"
-		pause >nul
-		exit /b
-	) else (
-		echo adding GnuWin to system path
-		setx PATH "%PATH%;C:\GnuWin\bin" -m
-		echo adding GnuWin to PATH for this session
-		set "PATH=%PATH%;C:\GnuWin\bin"
-	)
-)
-call :print_success "GnuWin installed"
-
-:: currently detecting git install path used GnuWin tools, so install GnuWin before git install path detection
-echo detect if git is in system path
-git --version >nul 2>&1
-if "%errorlevel%" neq "0" (
-	call :print_warning "git is not in system path"
-	echo detecting git install path...
-	for /f "tokens=*" %%f in ('dir %LOCALAPPDATA%\GitHub ^| grep PortableGit ^| awk "{print $5;}"') do set GitPath=%%f
-	if defined GitPath (
-		echo git install path detected: %LocalAppData%\GitHub\!GitPath! 
-		echo adding git into system path...
-		setx PATH "%PATH%;%LocalAppData%\GitHub\!GitPath!\cmd" -m
-		echo adding git into path for this session
-		set "PATH=%PATH%;%LocalAppData%\GitHub\!GitPath!\cmd"
-	) else (
-		call :print_failure "Didn't detect git install path, it should be like %LocalAppData%\GitHub\PortableGit_XXX"
-		pause >nul
-		exit /b
-	)
-) else (
-	echo git is already in system path
-)
-call :print_success "Git check pass"
+:: ========install GnuWin - now it's optional ========
+:: awk --version >nul 2>&1
+:: if "%errorlevel%" neq "0" (
+:: 	echo Install GnuWin by 'choco /y gnuwin'
+:: 	choco install -y gnuwin
+:: 	set errcode=!errorlevel!
+:: 	if "!errcode!" neq "0" (
+:: 		call :print_failure "Install GnuWin failed, error code: !errcode!"
+:: 		pause >nul
+:: 		exit /b
+:: 	) else (
+:: 		echo adding GnuWin to system path
+:: 		setx PATH "%PATH%;C:\GnuWin\bin" -m
+:: 		echo adding GnuWin to PATH for this session
+:: 		set "PATH=%PATH%;C:\GnuWin\bin"
+:: 	)
+:: )
+:: call :print_success "GnuWin installed"
 
 :: ========install VIM========
 echo detect if VIM installed
